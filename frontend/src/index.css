@@ -1,0 +1,32 @@
+:root {
+  color-scheme: light;
+
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+
+  --color-critical: #dc2626;
+  --color-critical-bg: #fee2e2;
+  --color-approaching: #d97706;
+  --color-approaching-bg: #fef3c7;
+  --color-ok: #16a34a;
+  --color-ok-bg: #dcfce7;
+  --color-unknown: #6b7280;
+  --color-unknown-bg: #f3f4f6;
+
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+}

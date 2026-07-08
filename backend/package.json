@@ -1,0 +1,23 @@
+{
+  "name": "software-license-tracker-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Internal tool for tracking software versions, licenses, and EOL/EOS dates across customer IT/OT environments.",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "migrate": "node -e \"require('./src/db/migrate').runMigrations()\"",
+    "test": "node --test",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop ecosystem.config.js",
+    "pm2:restart": "pm2 restart ecosystem.config.js",
+    "pm2:logs": "pm2 logs software-license-tracker"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pm2": "^7.0.3"
+  }
+}

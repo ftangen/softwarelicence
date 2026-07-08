@@ -1,0 +1,13 @@
+const { DatabaseSync } = require('node:sqlite');
+const path = require('node:path');
+const fs = require('node:fs');
+
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', '..', 'data', 'tracker.db');
+
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+
+const db = new DatabaseSync(DB_PATH);
+db.exec('PRAGMA foreign_keys = ON;');
+db.exec('PRAGMA journal_mode = WAL;');
+
+module.exports = db;

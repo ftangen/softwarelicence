@@ -1,0 +1,83 @@
+.software-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.software-group {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.software-group-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.software-group-header:hover {
+  background: var(--color-bg);
+}
+
+.software-group-name {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.software-group-chevron {
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  transition: transform 0.15s;
+  display: inline-block;
+}
+
+.software-group-chevron.expanded {
+  transform: rotate(90deg);
+}
+
+.software-group-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.registration-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1px solid var(--color-border);
+}
+
+.registration-table th,
+.registration-table td {
+  text-align: left;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.registration-table th {
+  background: var(--color-bg);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 0.03em;
+}
+
+.registration-table tbody tr:last-child td {
+  border-bottom: none;
+}
