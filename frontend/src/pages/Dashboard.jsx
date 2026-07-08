@@ -5,7 +5,6 @@ import StatusBadge from '../components/StatusBadge'
 import AddEntryModal from '../components/AddEntryModal'
 import EditEntryModal from '../components/EditEntryModal'
 import ConfirmDialog from '../components/ConfirmDialog'
-import './Dashboard.css'
 
 const STATUS_OPTIONS = ['Critical', 'Approaching', 'OK', 'Unknown']
 

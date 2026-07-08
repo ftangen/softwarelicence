@@ -2,17 +2,9 @@ const db = require('../connection');
 const HttpError = require('../../utils/httpError');
 const projectsRepo = require('./projects');
 const { computeStatus } = require('../../utils/status');
+const { validateDate } = require('../../utils/validation');
 
 const LICENSE_TYPES = ['Perpetual', 'Subscription', 'Volume', 'Support'];
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-
-function validateDate(label, value) {
-  if (value === undefined || value === null || value === '') return null;
-  if (!DATE_RE.test(value) || Number.isNaN(Date.parse(value))) {
-    throw new HttpError(400, `${label} must be a valid date in YYYY-MM-DD format`);
-  }
-  return value;
-}
 
 function validateFields({ software_name, license_type, eol_date, eos_date }) {
   if (!software_name || typeof software_name !== 'string' || !software_name.trim()) {

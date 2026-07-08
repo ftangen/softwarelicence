@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
 import Modal from './Modal'
 import AddCustomerModal from './AddCustomerModal'
+import SoftwareLibraryItemModal from './SoftwareLibraryItemModal'
 import { api } from '../api/client'
 
 const LICENSE_TYPES = ['Perpetual', 'Subscription', 'Volume', 'Support']
 const NEW_OPTION = '__new__'
 const PROJECT_NUMBER_RE = /^\d{5}$/
+
+function softwareLabel(item) {
+  return item.version ? `${item.software_name} — ${item.version}` : item.software_name
+}
 
 function AddEntryModal({ onClose, onCreated }) {
   const [customers, setCustomers] = useState([])
@@ -17,8 +22,10 @@ function AddEntryModal({ onClose, onCreated }) {
   const [newProjectNumber, setNewProjectNumber] = useState('')
   const [newProjectName, setNewProjectName] = useState('')
 
-  const [softwareName, setSoftwareName] = useState('')
-  const [version, setVersion] = useState('')
+  const [libraryItems, setLibraryItems] = useState([])
+  const [softwareId, setSoftwareId] = useState('')
+  const [showAddSoftware, setShowAddSoftware] = useState(false)
+
   const [eolDate, setEolDate] = useState('')
   const [eosDate, setEosDate] = useState('')
   const [licenseType, setLicenseType] = useState(LICENSE_TYPES[0])
@@ -29,6 +36,7 @@ function AddEntryModal({ onClose, onCreated }) {
 
   useEffect(() => {
     api.getCustomers().then(setCustomers).catch((err) => setError(err.message))
+    api.getSoftwareLibrary().then(setLibraryItems).catch((err) => setError(err.message))
   }, [])
 
   useEffect(() => {
@@ -56,6 +64,28 @@ function AddEntryModal({ onClose, onCreated }) {
     setShowAddCustomer(false)
   }
 
+  function applySoftwareSelection(item) {
+    setSoftwareId(String(item.id))
+    setEolDate(item.eol_date || '')
+    setEosDate(item.eos_date || '')
+  }
+
+  function handleSoftwareChange(e) {
+    const value = e.target.value
+    if (value === NEW_OPTION) {
+      setShowAddSoftware(true)
+      return
+    }
+    const item = libraryItems.find((i) => String(i.id) === value)
+    if (item) applySoftwareSelection(item)
+  }
+
+  function handleSoftwareCreated(item) {
+    setLibraryItems((prev) => [...prev, item])
+    applySoftwareSelection(item)
+    setShowAddSoftware(false)
+  }
+
   const isNewProject = projectId === NEW_OPTION
   const projectNumberValid = PROJECT_NUMBER_RE.test(newProjectNumber)
 
@@ -75,6 +105,11 @@ function AddEntryModal({ onClose, onCreated }) {
       setError('Project number must be 5 digits.')
       return
     }
+    const softwareItem = libraryItems.find((i) => String(i.id) === softwareId)
+    if (!softwareItem) {
+      setError('Select a software item')
+      return
+    }
 
     setSaving(true)
     try {
@@ -90,8 +125,8 @@ function AddEntryModal({ onClose, onCreated }) {
 
       await api.createSoftwareEntry({
         project_id: Number(finalProjectId),
-        software_name: softwareName,
-        version: version || null,
+        software_name: softwareItem.software_name,
+        version: softwareItem.version,
         eol_date: eolDate || null,
         eos_date: eosDate || null,
         license_type: licenseType,
@@ -169,13 +204,21 @@ function AddEntryModal({ onClose, onCreated }) {
           )}
 
           <label className="field">
-            <span>Software name</span>
-            <input value={softwareName} onChange={(e) => setSoftwareName(e.target.value)} required />
-          </label>
-
-          <label className="field">
-            <span>Version</span>
-            <input value={version} onChange={(e) => setVersion(e.target.value)} />
+            <span>Software</span>
+            <select value={softwareId} onChange={handleSoftwareChange} required>
+              <option value="" disabled>
+                Select software...
+              </option>
+              {libraryItems.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {softwareLabel(item)}
+                </option>
+              ))}
+              <option value={NEW_OPTION}>+ Add new software</option>
+            </select>
+            <small className="field-hint">
+              Pick from the Software Library, or add new software if it's not there yet.
+            </small>
           </label>
 
           <div className="field-row">
@@ -217,6 +260,10 @@ function AddEntryModal({ onClose, onCreated }) {
       </Modal>
 
       {showAddCustomer && <AddCustomerModal onClose={() => setShowAddCustomer(false)} onCreated={handleCustomerCreated} />}
+
+      {showAddSoftware && (
+        <SoftwareLibraryItemModal onClose={() => setShowAddSoftware(false)} onSaved={handleSoftwareCreated} />
+      )}
     </>
   )
 }

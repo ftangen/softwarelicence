@@ -45,9 +45,21 @@
   color: white;
 }
 
-.api-status {
+.sidebar-footer {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.api-status {
   font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.copyright {
+  font-size: 0.7rem;
+  line-height: 1.4;
   color: var(--color-text-muted);
 }
 

@@ -6,6 +6,7 @@ const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/customers', label: 'Customers' },
   { to: '/software', label: 'Software' },
+  { to: '/software-library', label: 'Software Library' },
 ]
 
 function AppLayout() {
@@ -33,7 +34,14 @@ function AppLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="api-status">API: {apiStatus}</div>
+        <div className="sidebar-footer">
+          <div className="api-status">API: {apiStatus}</div>
+          <div className="copyright">
+            © {new Date().getFullYear()} Origo Solutions AS
+            <br />
+            Fredrik Tangen
+          </div>
+        </div>
       </aside>
       <main className="content">
         <Outlet />
